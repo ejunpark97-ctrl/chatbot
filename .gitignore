@@ -11,6 +11,7 @@ wheels/
 
 # Environment variables and secrets
 .env
+.streamlit/secrets.toml
 
 # Evaluation output
 eval_report.json

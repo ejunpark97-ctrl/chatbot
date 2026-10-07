@@ -24,6 +24,16 @@ EMBEDDING_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
 
 
+def get_openai_api_key() -> str:
+    """Streamlit Cloud Secrets를 우선 사용하고, 로컬에서는 .env를 사용합니다."""
+    try:
+        secret_key = st.secrets["OPENAI_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        secret_key = None
+
+    return str(secret_key or os.getenv("OPENAI_API_KEY") or "").strip()
+
+
 def load_pdf_documents(data_dir: Path) -> list[Document]:
     """DATA 폴더 아래의 모든 PDF를 페이지 단위 문서로 읽습니다."""
     documents: list[Document] = []
@@ -53,7 +63,7 @@ def load_pdf_documents(data_dir: Path) -> list[Document]:
 def build_retriever() -> Any:
     """문서를 분할하고 OpenAI 임베딩으로 InMemoryVectorStore를 만듭니다."""
     # .env의 API 키는 앱 시작 시 한 번만 읽고, 키 자체는 화면에 표시하지 않습니다.
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = get_openai_api_key()
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY가 .env 파일에 설정되지 않았습니다.")
 
@@ -78,7 +88,7 @@ def build_retriever() -> Any:
 
 def build_answer_chain() -> Any:
     """최신 LCEL 파이프라인으로 답변 생성 체인을 구성합니다."""
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = get_openai_api_key()
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY가 .env 파일에 설정되지 않았습니다.")
 
@@ -163,7 +173,7 @@ def main() -> None:
     """Streamlit 화면과 질문 처리 흐름을 실행합니다."""
     load_dotenv(PROJECT_ROOT / ".env")
 
-    st.set_page_config(page_title="문서 기반 RAG 챗봇", page_icon="📚")
+    st.set_page_config(page_title="공무원 여비 RAG 챗봇", page_icon="📚")
     st.markdown(
         """
         <style>
@@ -173,10 +183,10 @@ def main() -> None:
         """,
         unsafe_allow_html=True,
     )
-    st.title("📚 문서 기반 RAG 챗봇")
+    st.title("📚 공무원 여비 RAG 챗봇")
     st.caption("DATA 폴더의 문서에 있는 내용만 근거로 답변합니다.")
 
-    if not os.getenv("OPENAI_API_KEY"):
+    if not get_openai_api_key():
         st.warning("프로젝트 루트의 .env 파일에 OPENAI_API_KEY를 입력해주세요.")
         st.stop()
 
