@@ -1,0 +1,26 @@
+[
+  {
+    "id": "overview",
+    "question": "공무원 여비 100문 100답은 어떤 내용을 다루나요?",
+    "expected_sources": ["공무원여비100문100답.pdf"],
+    "answer_keywords": ["공무원", "여비"]
+  },
+  {
+    "id": "guideline",
+    "question": "2024년 공무원 여비 업무 처리기준 문서의 성격은 무엇인가요?",
+    "expected_sources": ["2024년 9장 공무원여비업무 처리기준.pdf"],
+    "answer_keywords": ["공무원", "여비"]
+  },
+  {
+    "id": "foreign_travel",
+    "question": "국외여비 정액지급 및 숙박비 상한액 현지통화 환산 신청서는 어떤 내용을 작성하는 서식인가요?",
+    "expected_sources": ["2024년 9장 공무원여비업무 처리기준.pdf"],
+    "answer_keywords": ["국외여비", "숙박비"]
+  },
+  {
+    "id": "out_of_scope",
+    "question": "오늘 서울의 날씨는 어떤가요?",
+    "expected_sources": [],
+    "must_refuse": true
+  }
+]
